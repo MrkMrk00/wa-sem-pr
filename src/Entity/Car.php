@@ -2,12 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\CarRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CarRepository::class)
+ * @ApiResource(attributes={
+ *      "security": "is_granted('ROLE_USER')"
+ *})
  */
 class Car
 {
@@ -19,23 +25,17 @@ class Car
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Manufacturer", inversedBy="cars")
-     * @ORM\Column(type="string")
-     */
-    private $manufacturer;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="integer", lenght=4)
+     * @ORM\Column(type="integer", length=4)
      */
     private $manufactured_from;
 
     /**
-     * @ORM\Column(type="integer", lenght=4)
+     * @ORM\Column(type="integer", length=4)
      */
     private $manufactured_until;
 
@@ -58,6 +58,13 @@ class Car
      * @ORM\ManyToMany(targetEntity="App\Entity\BodyStyle")
      */
     private $body_styles;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Manufacturer::class, inversedBy="cars")
+     * @ORM\JoinColumn(nullable=false)
+     * @ApiSubresource()
+     */
+    private $manufacturer;
 
     public function __construct()
     {
@@ -141,20 +148,20 @@ class Car
         return $this;
     }
 
-    public function getManufacturer(): Manufacturer
+    public function getBodyStyles(): Collection
+    {
+        return $this->body_styles;
+    }
+
+    public function getManufacturer(): ?Manufacturer
     {
         return $this->manufacturer;
     }
 
-    public function setManufacturer(Manufacturer $manufacturer): self
+    public function setManufacturer(?Manufacturer $manufacturer): self
     {
         $this->manufacturer = $manufacturer;
 
         return $this;
-    }
-
-    public function getBodyStyles()
-    {
-        return $this->body_styles;
     }
 }

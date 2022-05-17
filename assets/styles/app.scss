@@ -1,0 +1,12 @@
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome/styles.css";
+@import "~bootstrap/scss/bootstrap";
+
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+nav {
+    background-color: lightblue;
+    font-weight: bold;
+}

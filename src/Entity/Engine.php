@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\EngineRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=EngineRepository::class)
+ * @ApiResource(attributes={
+ *      "security": "is_granted('ROLE_USER')"
+ *})
  */
 class Engine
 {

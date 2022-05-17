@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ManufacturerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ManufacturerRepository::class)
+ * @ApiResource(attributes={
+ *      "security": "is_granted('ROLE_USER')"
+ *})
  */
 class Manufacturer
 {
@@ -32,14 +36,15 @@ class Manufacturer
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Car", mappedBy="manufacturer")
-     * @ORM\Column(type="string")
+     * @ORM\OneToMany(targetEntity=Car::class, mappedBy="manufacturer")
      */
     private $cars;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->cars = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -59,11 +64,32 @@ class Manufacturer
     }
 
     /**
-     * @return Collection|Car[]
+     * @return Collection<int, Car>
      */
     public function getCars(): Collection
     {
         return $this->cars;
     }
 
+    public function addCar(Car $car): self
+    {
+        if (!$this->cars->contains($car)) {
+            $this->cars[] = $car;
+            $car->setManufacturer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCar(Car $car): self
+    {
+        if ($this->cars->removeElement($car)) {
+            // set the owning side to null (unless already changed)
+            if ($car->getManufacturer() === $this) {
+                $car->setManufacturer(null);
+            }
+        }
+
+        return $this;
+    }
 }
