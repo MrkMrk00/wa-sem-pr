@@ -11,9 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CarRepository::class)
- * @ApiResource(attributes={
- *      "security": "is_granted('ROLE_USER')"
- *})
  */
 class Car
 {
@@ -62,7 +59,6 @@ class Car
     /**
      * @ORM\ManyToOne(targetEntity=Manufacturer::class, inversedBy="cars")
      * @ORM\JoinColumn(nullable=false)
-     * @ApiSubresource()
      */
     private $manufacturer;
 

@@ -10,9 +10,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=BodyStyleRepository::class)
- * @ApiResource(attributes={
- *      "security": "is_granted('ROLE_USER')"
- *})
  */
 class BodyStyle
 {
