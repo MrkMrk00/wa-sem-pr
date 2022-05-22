@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ 'Add new car!'|trans }}{% endblock %}
+
 {% block body %}
     <div class="d-inline-block" style="max-width: 20%;">
         {% include 'forms/manufacturer.html.twig' with {'form': manufacturer_form} %}

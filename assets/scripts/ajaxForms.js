@@ -38,8 +38,9 @@ async function handleValidity(response, formElement) {
     if (response.status !== 201) {
         for (const error of json) {
             const formName = formElement.attr('name')
-            const invalidInputNameRegexp = /^\w*\.(.+)$/.exec(error.cause?.propertyPath)
+            const invalidInputNameRegexp = /^.*\.(.+)$/.exec(error.cause?.propertyPath)
             const invalidInputName = invalidInputNameRegexp ? invalidInputNameRegexp[1] : null;
+            console.log(invalidInputName)
             if (!invalidInputName) {
                 formElement.append(`<div class="text-danger remove-me">${error.message}</div>`)
                 break;
