@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div style="max-width: 20%;">
-        {{ form(manufacturer_form) }}
+    <div class="d-inline-block" style="max-width: 20%;">
+        {% include 'forms/manufacturer.html.twig' with {'form': manufacturer_form} %}
+    </div>
+    <div class="d-inline-block" style="max-width: 20%;">
+        {% include 'forms/body_style.html.twig' with {'form': body_style_form} %}
     </div>
 {% endblock %}

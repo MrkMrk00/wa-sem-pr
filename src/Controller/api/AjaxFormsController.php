@@ -2,9 +2,12 @@
 
 namespace App\Controller\api;
 
+use App\Form\BodyStyleType;
 use App\Form\ManufacturerType;
+use App\Repository\BodyStyleRepository;
 use App\Repository\ManufacturerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,11 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AjaxFormsController extends AbstractController
 {
-    public function handleForm()
-    {
-
-    }
-
     /**
      * @Route(path="/manufacturer", name="manufacturer", methods={"POST"})
      */
@@ -26,13 +24,40 @@ class AjaxFormsController extends AbstractController
     {
         $form = $this->createForm(ManufacturerType::class);
         $form->handleRequest($req);
-        $manufacturer = $form->getData();
+        $data = $form->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $repo->add($manufacturer, true);
-            return $this->json($manufacturer, 201);
+        if (!$form->isSubmitted() || !$form->isValid())
+            return $this->json($form->getErrors(true), 400);
+
+        $existing = $repo->findOneBy(['name' => $data->getName()]);
+        if ($existing) {
+            $form->addError(new FormError("This manufacturer already exists"));
+            return $this->json($form->getErrors(true), 409);
         }
 
-        return $this->json($form->getErrors(true), 400);
+        $repo->add($data, true);
+        return $this->json($data, 201);
+    }
+
+    /**
+     * @Route(path="/body_style", name="body_style", methods={"POST"})
+     */
+    public function newBodyStyle(Request $req, BodyStyleRepository $repo): Response
+    {
+        $form = $this->createForm(BodyStyleType::class);
+        $form->handleRequest($req);
+        $data = $form->getData();
+
+        if (!$form->isSubmitted() || !$form->isValid())
+            return $this->json($form->getErrors(true), 400);
+
+        $existing = $repo->findOneBy(['name' => $data->getName()]);
+        if ($existing) {
+            $form->addError(new FormError("This body style already exists"));
+            return $this->json($form->getErrors(true), 409);
+        }
+
+        $repo->add($data, true);
+        return $this->json($data, 201);
     }
 }

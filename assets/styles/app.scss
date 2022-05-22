@@ -10,3 +10,10 @@ nav {
     background-color: lightblue;
     font-weight: bold;
 }
+
+.ajax-form-check {
+    @extend .fa-solid, .fa-check, .fa-xl;
+    display: none;
+    color: lightgreen;
+    margin: 1rem;
+}

@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BodyStyleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,9 +21,7 @@ class BodyStyle
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\All({
-     *     @Assert\Length(max=225, min=5)
-     * })
+     * @Assert\Length(min=1, max=20)
      */
     private $name;
 
