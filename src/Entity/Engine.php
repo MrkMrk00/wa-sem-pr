@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\EngineRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,7 +34,7 @@ class Engine
     private $size;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", length=2)
      */
     private $number_of_cylinders;
 
@@ -50,6 +52,21 @@ class Engine
      * @ORM\Column(type="string", length=64)
      */
     private $aspiration;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Car::class, mappedBy="engines")
+     */
+    private $cars;
+
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
+    private $fuel;
+
+    public function __construct()
+    {
+        $this->cars = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -127,4 +144,50 @@ class Engine
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Car>
+     */
+    public function getCars(): Collection
+    {
+        return $this->cars;
+    }
+
+    public function addCar(Car $car): self
+    {
+        if (!$this->cars->contains($car)) {
+            $this->cars[] = $car;
+            $car->addEngine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCar(Car $car): self
+    {
+        if ($this->cars->removeElement($car)) {
+            $car->removeEngine($this);
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return ($this->name ? $this->name . ' ' : '') . $this->fuel . ' ' . $this->size . 'cm³ ' . $this->number_of_cylinders . 'piston';
+    }
+
+    public function getFuel(): ?string
+    {
+        return $this->fuel;
+    }
+
+    public function setFuel(string $fuel): self
+    {
+        $this->fuel = $fuel;
+
+        return $this;
+    }
+
+
 }

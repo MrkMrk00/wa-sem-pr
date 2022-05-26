@@ -8,6 +8,7 @@ use App\Repository\CarRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CarRepository::class)
@@ -28,6 +29,10 @@ class Car
 
     /**
      * @ORM\Column(type="integer", length=4)
+     * @Assert\Range(
+     *     max="now year",
+     *     min=1850
+     * )
      */
     private $manufactured_from;
 
@@ -43,6 +48,7 @@ class Car
 
     /**
      * @ORM\Column(type="string", length=3)
+     * @Assert\Choice({"FWD", "RWD", "AWD"})
      */
     private $driven_axle;
 
@@ -62,9 +68,15 @@ class Car
      */
     private $manufacturer;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Engine::class, inversedBy="cars")
+     */
+    private $engines;
+
     public function __construct()
     {
         $this->body_styles = new ArrayCollection();
+        $this->engines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,6 +169,30 @@ class Car
     public function setManufacturer(?Manufacturer $manufacturer): self
     {
         $this->manufacturer = $manufacturer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Engine>
+     */
+    public function getEngines(): Collection
+    {
+        return $this->engines;
+    }
+
+    public function addEngine(Engine $engine): self
+    {
+        if (!$this->engines->contains($engine)) {
+            $this->engines[] = $engine;
+        }
+
+        return $this;
+    }
+
+    public function removeEngine(Engine $engine): self
+    {
+        $this->engines->removeElement($engine);
 
         return $this;
     }

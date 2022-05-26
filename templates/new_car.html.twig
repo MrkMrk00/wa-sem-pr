@@ -3,10 +3,29 @@
 {% block title %}{{ 'Add new car!'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="d-inline-block" style="max-width: 20%;">
-        {% include 'forms/manufacturer.html.twig' with {'form': manufacturer_form} %}
-    </div>
-    <div class="d-inline-block" style="max-width: 20%;">
-        {% include 'forms/body_style.html.twig' with {'form': body_style_form} %}
+    <div class="container-fluid mt-3">
+        <h1 class="display-1 w-100 text-center mb-3">{{ 'Add new car'|trans }}</h1>
+        <div>
+            <div class="row justify-content-between">
+                <div class="col-md-6">
+                    <span class="d-block mb-3">
+                        {% include 'forms/car.html.twig' with {'form': car_form} %}
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <span class="d-block mb-3">
+                        {% include 'forms/manufacturer.html.twig' with {'form': manufacturer_form} %}
+                    </span>
+                    <span class="d-block mb-3">
+                        {% include 'forms/body_style.html.twig' with {'form': body_style_form} %}
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <span class="d-block mb-3">
+                        {% include 'forms/engine.html.twig' with {'form': engine_form} %}
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'forms/base_form.html.twig' %}
+{% block title %}{{ 'Engine'|trans }}{% endblock %}
+
+{% block start %}
+    {{ form_row(form.name) }}
+
+    {{ form_label(form.size) }}
+    <div class="input-group mb-2">
+        {{ form_widget(form.size) }}
+        <span class="input-group-text">cm³</span>
+    </div>
+    {{ form_rest(form.size) }}
+
+    {{ form_label(form.max_power) }}
+    <div class="input-group mb-2">
+        {{ form_widget(form.max_power) }}
+        <span class="input-group-text">kW</span>
+    </div>
+    {{ form_rest(form.max_power) }}
+
+    {{ form_label(form.max_torque) }}
+    <div class="input-group mb-2">
+        {{ form_widget(form.max_torque) }}
+        <span class="input-group-text">Nm</span>
+    </div>
+    {{ form_rest(form.max_torque) }}
+{% endblock %}

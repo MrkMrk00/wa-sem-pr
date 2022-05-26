@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Form\BodyStyleType;
+use App\Form\CarType;
+use App\Form\EngineType;
 use App\Form\ManufacturerType;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -35,11 +37,17 @@ class IndexController extends AbstractController
         $body_style_form = $this->createForm(BodyStyleType::class, null, [
             'attr' => ['ajax-form' => '']
         ]);
+        $engine_form = $this->createForm(EngineType::class, null, [
+            'attr' => ['ajax-form' => '']
+        ]);
+        $car_form = $this->createForm(CarType::class);
 
         return $this->render('new_car.html.twig', [
             'active_link' => 'new_car',
             'manufacturer_form' => $manufacturer_form->createView(),
-            'body_style_form' => $body_style_form->createView()
+            'body_style_form' => $body_style_form->createView(),
+            'engine_form' => $engine_form->createView(),
+            'car_form' => $car_form->createView()
         ]);
     }
 }
