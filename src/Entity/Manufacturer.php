@@ -38,6 +38,7 @@ class Manufacturer
 
     /**
      * @ORM\OneToMany(targetEntity=Car::class, mappedBy="manufacturer")
+     * @Ignore()
      */
     private $cars;
 

@@ -6,6 +6,7 @@ use App\Repository\BodyStyleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -29,6 +30,7 @@ class BodyStyle
 
     /**
      * @ORM\OneToMany(targetEntity=Car::class, mappedBy="body_style")
+     * @Ignore()
      */
     private $cars;
 

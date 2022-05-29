@@ -44,16 +44,14 @@ function formDefault(formElement) {
 
 async function handleValidity(response, formElement) {
     const json = await response.json()
-    console.log(json)
     if (response.status !== 201) {
         for (const error of json) {
             const formName = formElement.attr('name')
             const invalidInputNameRegexp = /^.*\.(.+)$/.exec(error.cause?.propertyPath)
-            const invalidInputName = invalidInputNameRegexp ? invalidInputNameRegexp[1] : null;
-            console.log(invalidInputName)
+            const invalidInputName = invalidInputNameRegexp ? invalidInputNameRegexp[1] : null
             if (!invalidInputName) {
-                formElement.append(`<div class="text-danger remove-me">${error.message}</div>`)
-                break;
+                formElement.prepend(`<div class="text-danger remove-me">${error.message}</div>`)
+                break
             }
             const input = formElement.find(`input[name="${formName}[${invalidInputName}]"]`)
             input.addClass('is-invalid')

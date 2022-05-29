@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Car;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +18,13 @@ class CarType extends AbstractType
             ->add('name')
             ->add('generation')
             ->add('manufactured')
-            ->add('driven_axle')
+            ->add('driven_axle', ChoiceType::class, [
+                'choices' => [
+                    'FWD' => 'FWD',
+                    'RWD' => 'RWD',
+                    'AWD' => 'AWD'
+                ]
+            ])
             ->add('seat_count')
             ->add('engine')
             ->add('body_style')
