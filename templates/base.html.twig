@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html lang="cs">
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% include "menu.html.twig" %}
-        <main>
-            {% block body %}{% endblock %}
-        </main>
-    </body>
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+    {% block flashes %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-alert" flash-label="{{ label|default('notice') }}">
+                    <p>{{ message }}</p>
+                    <button type="button"><i class="fa-solid fa-x"></i></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}
+
+    {% block menu %}
+        {% include "components/menu.html.twig" %}
+    {% endblock %}
+    <main>
+        {% block body %}{% endblock %}
+    </main>
+</body>
 </html>

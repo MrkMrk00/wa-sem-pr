@@ -16,12 +16,11 @@ class CarType extends AbstractType
             ->add('manufacturer')
             ->add('name')
             ->add('generation')
-            ->add('manufactured_from')
-            ->add('manufactured_until')
+            ->add('manufactured')
             ->add('driven_axle')
             ->add('seat_count')
-            ->add('body_styles')
-            ->add('engines')
+            ->add('engine')
+            ->add('body_style')
             ->add('submit', SubmitType::class)
         ;
     }

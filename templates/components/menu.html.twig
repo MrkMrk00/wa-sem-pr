@@ -1,26 +1,30 @@
-<nav class="navbar navbar-expand-xl navbar-light px-3 sticky-top">
+{% if active_link is not defined %}
+    {% set active_link = null %}
+{% endif %}
+
+<nav class="navbar navbar-expand-xl navbar-light bg-light px-3 sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" style="margin-right: 3rem;" href="/">AUTA</a>
+        <a class="navbar-brand" href="/"><i class="fa-solid fa-car text-primary"></i></a>
         <button class="navbar-toggler border-primary text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="fa-solid fa-ellipsis p-2"></span>
         </button>
         <div class="collapse navbar-collapse mx-5 mx-xl-0" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-xl-0">
                 <li class="nav-item px-xl-2">
-                    <a class="d-inline-block nav-link{% if active_link is defined and active_link == 'index' %} active{% endif %}"
-                       aria-current="page" href="{{ path('index') }}"><i class="fa-solid fa-trophy"></i> Home</a>
+                    <a class="d-inline-block nav-link{% if active_link == 'index' %} active{% endif %}"
+                       aria-current="page" href="{{ path('index') }}"><i class="fa-solid fa-trophy{% if active_link == 'index' %} text-primary{% endif %}"></i> Top 10</a>
                 </li>
                 <li class="nav-item px-xl-2">
-                    <a class="d-inline-block nav-link{% if active_link is defined and active_link == 'yetinder' %} active{% endif %}"
-                       href=""><i class="fa-solid fa-heart"></i> Yetinder</a>
+                    <a class="d-inline-block nav-link{% if active_link == 'my_cars' %} active{% endif %}"
+                       href="{{ path('my_cars') }}"><i class="fa-solid fa-car{% if active_link == 'my_cars' %} text-primary{% endif %}"></i> My cars</a>
                 </li>
                 <li class="nav-item px-xl-2">
-                    <a class="d-inline-block nav-link{% if active_link is defined and active_link == 'yetistics' %} active{% endif %}"
-                       href=""><i class="fa-solid fa-chart-column"></i> {{ 'Yetistics'|trans }}</a>
+                    <a class="d-inline-block nav-link{% if active_link == 'yetistics' %} active{% endif %}"
+                       href=""><i class="fa-solid fa-chart-column{% if active_link == 'yetistics' %} text-primary{% endif %}"></i> {{ 'Yetistics'|trans }}</a>
                 </li>
                 <li class="nav-item px-xl-5">
-                    <a class="d-inline-block nav-link{% if active_link is defined and active_link == 'new_car' %} active{% endif %}"
-                       href="{{ path('new_car') }}"><i class="fa-solid fa-plus"></i> {{ 'New car'|trans }}</a>
+                    <a class="d-inline-block nav-link{% if active_link == 'new_car' %} active{% endif %}"
+                       href="{{ path('new_car') }}"><i class="fa-solid fa-plus{% if active_link == 'new_car' %} text-primary{% endif %}"></i> New car</a>
                 </li>
             </ul>
             <ul class="navbar-nav d-flex flex-row justify-content-between flex-xl-row-reverse flex-nowrap">
@@ -36,8 +40,14 @@
                     </a>
                 </li>
                 {% if app.user != null %}
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        {% set user_icon_style = 'text-danger' %}
+                    {% else %}
+                        {% set user_icon_style = 'text-primary' %}
+                    {% endif %}
+
                     <span class="navbar-text mx-2">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user {{ user_icon_style }}"></i>
                                 {{ app.user.email }}
                             </span>
                 {% endif %}

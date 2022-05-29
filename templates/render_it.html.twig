@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if title is defined %}
+        {{ title }}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row justify-content-center my-3">
+            <div class="col-lg-6">
+                {% if type is defined and type == 'form' %}
+                    {{ form(it) }}
+                {% elseif type == 'iterable' %}
+                    {% for a in it %}
+                        {{ a }}
+                    {% endfor %}
+                {% elseif type == 'iterable_form' %}
+                    {% for a in it %}
+                        {{ form(a) }}
+                    {% endfor %}
+                {% else %}
+                    {{ it }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

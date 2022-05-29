@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\CarRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -34,12 +32,7 @@ class Car
      *     min=1850
      * )
      */
-    private $manufactured_from;
-
-    /**
-     * @ORM\Column(type="integer", length=4)
-     */
-    private $manufactured_until;
+    private $manufactured;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -58,25 +51,37 @@ class Car
     private $seat_count;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\BodyStyle")
-     */
-    private $body_styles;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Manufacturer::class, inversedBy="cars")
      * @ORM\JoinColumn(nullable=false)
      */
     private $manufacturer;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Engine::class, inversedBy="cars")
+     * @ORM\ManyToOne(targetEntity=BodyStyle::class, inversedBy="cars")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $engines;
+    private $body_style;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Engine::class, inversedBy="cars")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $engine;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="cars")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $added_by;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="car", orphanRemoval=true)
+     */
+    private $images;
 
     public function __construct()
     {
-        $this->body_styles = new ArrayCollection();
-        $this->engines = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,29 +89,6 @@ class Car
         return $this->id;
     }
 
-    public function getManufacturedFrom(): ?int
-    {
-        return $this->manufactured_from;
-    }
-
-    public function setManufacturedFrom(int $manufactured_from): self
-    {
-        $this->manufactured_from = $manufactured_from;
-
-        return $this;
-    }
-
-    public function getManufacturedUntil(): ?int
-    {
-        return $this->manufactured_until;
-    }
-
-    public function setManufacturedUntil(int $manufactured_until): self
-    {
-        $this->manufactured_until = $manufactured_until;
-
-        return $this;
-    }
 
     public function getGeneration(): ?string
     {
@@ -156,11 +138,6 @@ class Car
         return $this;
     }
 
-    public function getBodyStyles(): Collection
-    {
-        return $this->body_styles;
-    }
-
     public function getManufacturer(): ?Manufacturer
     {
         return $this->manufacturer;
@@ -173,26 +150,89 @@ class Car
         return $this;
     }
 
-    /**
-     * @return Collection<int, Engine>
-     */
-    public function getEngines(): Collection
+    public function getBodyStyle(): ?BodyStyle
     {
-        return $this->engines;
+        return $this->body_style;
     }
 
-    public function addEngine(Engine $engine): self
+    public function setBodyStyle(?BodyStyle $body_style): self
     {
-        if (!$this->engines->contains($engine)) {
-            $this->engines[] = $engine;
+        $this->body_style = $body_style;
+
+        return $this;
+    }
+
+    public function getEngine(): ?Engine
+    {
+        return $this->engine;
+    }
+
+    public function setEngine(?Engine $engine): self
+    {
+        $this->engine = $engine;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getManufactured()
+    {
+        return $this->manufactured;
+    }
+
+    /**
+     * @param mixed $manufactured
+     */
+    public function setManufactured($manufactured): void
+    {
+        $this->manufactured = $manufactured;
+    }
+
+    public function getAddedBy(): ?User
+    {
+        return $this->added_by;
+    }
+
+    public function setAddedBy(?User $added_by): self
+    {
+        $this->added_by = $added_by;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->manufacturer->getName() . ' ' . $this->getName();
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setCar($this);
         }
 
         return $this;
     }
 
-    public function removeEngine(Engine $engine): self
+    public function removeImage(Image $image): self
     {
-        $this->engines->removeElement($engine);
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getCar() === $this) {
+                $image->setCar(null);
+            }
+        }
 
         return $this;
     }

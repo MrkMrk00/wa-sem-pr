@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\EngineRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -54,14 +53,14 @@ class Engine
     private $aspiration;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Car::class, mappedBy="engines")
-     */
-    private $cars;
-
-    /**
      * @ORM\Column(type="string", length=32)
      */
     private $fuel;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Car::class, mappedBy="engine")
+     */
+    private $cars;
 
     public function __construct()
     {
@@ -145,6 +144,23 @@ class Engine
         return $this;
     }
 
+    public function __toString()
+    {
+        return ($this->name ? $this->name . ' ' : '') . $this->fuel . ' ' . $this->getAspiration() . ' ' . $this->size . 'cm³';
+    }
+
+    public function getFuel(): ?string
+    {
+        return $this->fuel;
+    }
+
+    public function setFuel(string $fuel): self
+    {
+        $this->fuel = $fuel;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Car>
      */
@@ -157,7 +173,7 @@ class Engine
     {
         if (!$this->cars->contains($car)) {
             $this->cars[] = $car;
-            $car->addEngine($this);
+            $car->setEngine($this);
         }
 
         return $this;
@@ -166,25 +182,11 @@ class Engine
     public function removeCar(Car $car): self
     {
         if ($this->cars->removeElement($car)) {
-            $car->removeEngine($this);
+            // set the owning side to null (unless already changed)
+            if ($car->getEngine() === $this) {
+                $car->setEngine(null);
+            }
         }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return ($this->name ? $this->name . ' ' : '') . $this->fuel . ' ' . $this->size . 'cm³ ' . $this->number_of_cylinders . 'piston';
-    }
-
-    public function getFuel(): ?string
-    {
-        return $this->fuel;
-    }
-
-    public function setFuel(string $fuel): self
-    {
-        $this->fuel = $fuel;
 
         return $this;
     }

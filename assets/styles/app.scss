@@ -6,14 +6,64 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 
-nav {
-    background-color: lightblue;
-    font-weight: bold;
-}
-
 .ajax-form-check {
     @extend .fa-solid, .fa-check, .fa-xl;
     display: none;
     color: lightgreen;
     margin: 1rem;
+}
+
+.card-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+tr[data-href] {
+    cursor: pointer;
+}
+
+.flash-alert {
+    @extend .alert;
+    display: flex;
+    justify-content: space-between;
+    width: 20%;
+    text-align: left;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    background-color: white;
+
+    z-index: 10000;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+        rgba(0, 0, 0, 0.12) 0px -12px 30px,
+        rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px,
+        rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+
+    button {
+        @extend .btn, .btn-outline-secondary;
+        max-height: 2.5rem;
+        margin: 0.5rem 0 0.5rem 0;
+    }
+
+    p {
+        margin: 0.5rem 0 0.5rem 0;
+        max-width: 75%;
+        overflow-wrap: anywhere;
+    }
+
+    &[flash-label=notice] {
+        @extend .alert-primary;
+    }
+
+    &[flash-label=error] {
+        @extend .alert-danger;
+    }
+
+    &[flash-label=success] {
+        @extend .alert-success;
+    }
 }

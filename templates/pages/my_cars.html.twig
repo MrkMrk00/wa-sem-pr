@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My cars!{% endblock %}
+
+{% block body %}
+    <div class="container-fluid my-3">
+        <div class="row justify-content-center">
+            {% for car in cars %}
+                <div class="col-lg-4 col-sm-6">
+                    {% include 'components/cards/car.html.twig' with {'car': car} %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

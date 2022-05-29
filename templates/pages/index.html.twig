@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Here are cars!'|trans }}{% endblock %}
+
+{% block body %}
+{% for car in top_ten_cars %}
+    {% include 'components/cards/car.html.twig' with {
+        'car': car,
+        'dbal': true
+    } %}
+{% endfor %}
+{% endblock %}

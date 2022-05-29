@@ -70,7 +70,7 @@ async function reloadChoices() {
     const carForm = $('form[name=car]')
 
     const bodyStyles = await (await fetch(API_URLS.bodyStyle)).json()
-    const bodyStylesSelect = carForm.find('select[name="car[body_styles][]"]')
+    const bodyStylesSelect = carForm.find('select[name="car[body_style]"]')
     rebuildSelect(bodyStylesSelect, bodyStyles)
 
     const manufacturers = await (await fetch(API_URLS.manufacturer)).json()
@@ -78,7 +78,7 @@ async function reloadChoices() {
     rebuildSelect(manufSelect, manufacturers)
 
     const engines = await (await fetch(API_URLS.engine)).json()
-    const engineSelect = carForm.find('select[name="car[engines][]"]')
+    const engineSelect = carForm.find('select[name="car[engine]"]')
     rebuildSelect(engineSelect, engines)
 }
 

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Car detail'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid my-3">
+        <div class="row justify-content-center">
+            {% if car %}
+                <div class="col-md-4 col-lg-6">
+                    {% include 'components/cards/car.html.twig' with { 'car': car } %}
+                </div>
+            {% else %}
+                <h1 class="display-1 w-100 text-center text-danger">Car with this ID does not exist!</h1>
+                <a href="{{ path('index') }}"><h3 class="w-100 text-center">To index!</h3></a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

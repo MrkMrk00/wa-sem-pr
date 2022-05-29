@@ -1,0 +1,55 @@
+{% if dbal is not defined %}
+    {% set dbal = false %}
+{% endif %}
+<div class="card">
+    <div class="card-body">
+        <div class="card-title d-flex justify-content-between">
+            <h5>{% if dbal %}{{ car.manufacturer_name }}{% else %}{{ car.manufacturer.name }}{% endif %} {{ car.name }}</h5>
+            <span>{% if dbal %}<p>{{ (100*(car.review/car.review_count+1))|number_format('2') }} %</p>{% endif %}</span>
+        </div>
+
+        <ul class="list-group list-group-flush card-text">
+            {% if car.generation %}
+                <li class="list-group-item card-item">
+                    <span>{{ 'Generation'|trans }}</span>
+                    <span>{{ car.generation }}</span>
+                </li>
+            {% endif %}
+            <li class="list-group-item card-item">
+                <span>{{ 'Manufactured in'|trans }}</span>
+                <span>{{ car.manufactured }}</span>
+            </li>
+            <li class="list-group-item card-item">
+                <span>{{ 'Driven axle'|trans }}</span>
+                <span>{{ car.drivenAxle }}</span>
+            </li>
+            <li class="list-group-item card-item">
+                <span>{{ 'Seat count'|trans }}</span>
+                <span>{{ car.seatCount }}</span>
+            </li>
+        </ul>
+        <div class="d-flex justify-content-between">
+            <span>
+                <a href="
+                        {% if dbal %}{{ path('details.manufacturer', {'id': car.manufacturer_id}) }}
+                        {% else %}{{ path('details.manufacturer', {'id': car.manufacturer.id}) }}{% endif %}"
+                   class="card-link">Manufacturer</a>
+                <a href="{% if dbal %}{{ path('details.engine', {'id': car.engine_id}) }}
+                        {% else %}{{ path('details.engine', {'id': car.engine.id}) }}{% endif %}"
+                   class="card-link">Engine</a>
+            </span>
+            {% if app.user is defined %}
+                {% if dbal and app.user.id is same as(car.addedBy) %}
+                    {% set editable = true %}
+                {% elseif not dbal and app.user is same as(car.addedBy) %}
+                    {% set editable = true %}
+                {% else %}
+                    {% set editable = false %}
+                {% endif %}
+                {% if editable %}
+                    <a class="card-link text-danger" href="{{ path('edit.car', {'id': car.id}) }}">Edit</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>

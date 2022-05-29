@@ -38,7 +38,6 @@ class Manufacturer
 
     /**
      * @ORM\OneToMany(targetEntity=Car::class, mappedBy="manufacturer")
-     * @Ignore()
      */
     private $cars;
 
@@ -46,7 +45,6 @@ class Manufacturer
     {
         $this->cars = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -63,6 +61,11 @@ class Manufacturer
         $this->name = $name;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     /**
@@ -93,10 +96,5 @@ class Manufacturer
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 }

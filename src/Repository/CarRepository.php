@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Car;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,28 +41,36 @@ class CarRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Car[] Returns an array of Car objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getTenTopRated(Connection $conn)
+    {
+        $qb0 = $conn->createQueryBuilder();
+        $qb0->select(
+            'r.car_id', 'r.user_id',
+            'SUM(r.value) review',
+            'COUNT(r.id) AS review_count')
+            ->from('car_review', 'r')
+            ->groupBy('r.id');
 
-//    public function findOneBySomeField($value): ?Car
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $qb1 = $conn->createQueryBuilder();
+        try {
+            $result = $qb1->select(
+                'c.*',
+                'c.driven_axle AS drivenAxle',
+                'c.seat_count AS seatCount',
+                'c.added_by_id AS addedBy',
+                'm.name AS manufacturer_name',
+                'COALESCE(r.review, 0) AS review',
+                'COALESCE(r.review_count, 1) AS review_count')
+                ->from('car', 'c')
+                ->leftJoin('c', '(' . $qb0->getSQL() . ')', 'r', 'r.car_id = c.id')
+                ->leftJoin('c', 'manufacturer', 'm', 'c.manufacturer_id=m.id')
+                ->setMaxResults(10)
+                ->executeQuery()
+                ->fetchAllAssociative();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+
+        return $result;
+    }
 }
