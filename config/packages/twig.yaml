@@ -2,6 +2,9 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     form_themes: ['bootstrap_5_layout.html.twig']
 
+    globals:
+        upload_image_dir: '%images_dir_relative%'
+
 when@test:
     twig:
         strict_variables: true

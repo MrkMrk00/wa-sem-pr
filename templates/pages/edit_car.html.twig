@@ -8,27 +8,41 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="d-block mb-3">
-                        {% include 'forms/car.html.twig' with {'form': car_form} %}
+                        {% include 'forms/car.html.twig' with {
+                            'form': car_form,
+                            'title': app.user.email ~ "'s " ~ car
+                        } %}
                     </div>
                 </div>
                 <div class="col-md-3">
+                    <div class="d-block mb-3 card">
+                        <div class="card-body">
+                            {{ form(images_form) }}
+                        </div>
+                    </div>
                     {% if car.images is not empty %}
                     <div class="d-block mb-3 card">
                         <div class="card-body">
                             <h5 class="card-title">Images:</h5>
                             <div class="card-text">
                                 {% for image in car.images %}
+                                    <div class="position-relative text-center">
+                                        <a href="{{ upload_image_dir }}/{{ image.fileName }}" target="_blank">
+                                            <img class="img-thumbnail"
+                                             src="{{ upload_image_dir }}/{{ image.fileName }}"
+                                             alt="{{ image.fileName }}"
+                                            >
+                                        </a>
+                                        <button class="delete-image-button" data-bs-toggle="modal" data-bs-target="#delete-image-modal"></button>
+                                        {% include 'components/delete_image_modal.html.twig' with {
+                                            'image': image
+                                        } %}
+                                    </div>
                                 {% endfor %}
                             </div>
                         </div>
                     </div>
                     {% endif %}
-
-                    <div class="d-block mb-3 card">
-                        <div class="card-body">
-                            {{ form(images_form) }}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

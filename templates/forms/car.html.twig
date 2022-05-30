@@ -1,2 +1,8 @@
 {% extends 'forms/base_form.html.twig' %}
-{% block title %}{{ 'Car'|trans }}{% endblock %}
+{% block title %}
+    {% if title is defined %}
+        {{ title }}
+    {% else %}
+        Car
+    {% endif %}
+{% endblock %}

@@ -23,8 +23,18 @@ tr[data-href] {
     cursor: pointer;
 }
 
+@mixin box-shad() {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px,
+    rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px,
+    rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
 .flash-alert {
     @extend .alert;
+    @include box-shad();
+
     display: flex;
     justify-content: space-between;
     width: 20%;
@@ -36,12 +46,6 @@ tr[data-href] {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-        rgba(0, 0, 0, 0.12) 0px -12px 30px,
-        rgba(0, 0, 0, 0.12) 0px 4px 6px,
-        rgba(0, 0, 0, 0.17) 0px 12px 13px,
-        rgba(0, 0, 0, 0.09) 0px -3px 5px;
-
 
     button {
         @extend .btn, .btn-outline-secondary;
@@ -66,4 +70,14 @@ tr[data-href] {
     &[flash-label=success] {
         @extend .alert-success;
     }
+}
+
+.delete-image-button {
+    @extend .btn, .btn-danger, .fa-solid, .fa-x;
+    @include box-shad();
+
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    padding: 0.5rem;
 }

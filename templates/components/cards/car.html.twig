@@ -38,7 +38,7 @@
                         {% else %}{{ path('details.engine', {'id': car.engine.id}) }}{% endif %}"
                    class="card-link">Engine</a>
             </span>
-            {% if app.user is defined %}
+            {% if app.user != null %}
                 {% if dbal and app.user.id is same as(car.addedBy) %}
                     {% set editable = true %}
                 {% elseif not dbal and app.user is same as(car.addedBy) %}

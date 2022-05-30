@@ -20,7 +20,7 @@ class Image
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $path;
+    private $fileName;
 
     /**
      * @ORM\ManyToOne(targetEntity=Car::class, inversedBy="images")
@@ -33,14 +33,14 @@ class Image
         return $this->id;
     }
 
-    public function getPath(): ?string
+    public function getFileName(): ?string
     {
-        return $this->path;
+        return $this->fileName;
     }
 
-    public function setPath(string $path): self
+    public function setFileName(string $fileName): self
     {
-        $this->path = $path;
+        $this->fileName = $fileName;
 
         return $this;
     }
