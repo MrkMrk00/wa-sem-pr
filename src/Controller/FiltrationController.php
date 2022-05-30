@@ -4,18 +4,17 @@ namespace App\Controller;
 
 use App\Form\CarSearchFormType;
 use App\Repository\CarRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(path="/cars", name="car_filtration.")
- */
 class FiltrationController extends AbstractController
 {
     /**
-     * @Route(path="/", name="index")
+     * @Route(path="/cars", name="car_filtration")
+     * @IsGranted("ROLE_USER")
      */
     public function filtration(Request $req, CarRepository $repo): Response
     {
