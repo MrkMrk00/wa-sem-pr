@@ -22,7 +22,7 @@ class IndexController extends AbstractController
      */
     public function index(Connection $conn, CarRepository $repo): Response
     {
-        $top_ten_cars = $repo->getTenTopRated($conn);
+        $top_ten_cars = $repo->getTenTopRated();
         return $this->render('pages/index.html.twig', [
             'active_link' => 'index',
             'top_ten_cars' => $top_ten_cars

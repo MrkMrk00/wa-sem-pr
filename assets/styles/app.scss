@@ -81,3 +81,11 @@ tr[data-href] {
     top: 1rem;
     padding: 0.5rem;
 }
+
+.info-list-group {
+    @extend .list-group;
+
+    li {
+        @extend .list-group-item, .d-flex, .justify-content-between;
+    }
+}

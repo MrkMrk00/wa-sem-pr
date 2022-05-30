@@ -4,7 +4,16 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title d-flex justify-content-between">
-            <h5>{% if dbal %}{{ car.manufacturer_name }}{% else %}{{ car.manufacturer.name }}{% endif %} {{ car.name }}</h5>
+            <a href="{{ path('details.car', { 'id': car.id }) }}">
+                <h5>
+                    {% if dbal %}
+                        {{ car.manufacturer_name }}
+                    {% else %}
+                        {{ car.manufacturer.name }}
+                    {% endif %}
+                    {{ car.name }}
+                </h5>
+            </a>
             <span>{% if dbal %}<p>{{ (100*(car.review/car.review_count+1))|number_format('2') }} %</p>{% endif %}</span>
         </div>
 

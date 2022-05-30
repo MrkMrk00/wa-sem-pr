@@ -1,0 +1,40 @@
+<ul class="info-list-group col-lg-6">
+    {% if engine.name != null%}
+        <li>
+            <span>Engine code:</span>
+            <span><strong>{{ engine.name }}</strong></span>
+        </li>
+    {% endif %}
+    <li>
+        <div class="row justify-content-between text-center w-100">
+            <div class="col-4 d-flex flex-column">
+                <span>Fuel:</span>
+                <span><strong>{{ engine.fuel }}</strong></span>
+            </div>
+            <div class="col-4 d-flex flex-column">
+                <span>Number of cylinders:</span>
+                <span><strong>{{ engine.numberOfCylinders }}</strong></span>
+            </div>
+            <div class="col-4 d-flex flex-column">
+                <span>Aspiration:</span>
+                <span><strong {% if engine.aspiration != 'NA' %}class="text-danger"{% endif %} ">{{ engine.aspiration }}</strong></span>
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="row justify-content-between text-center w-100">
+            <div class="col-4 d-flex flex-column">
+                <span>Engine size:</span>
+                <span><strong>{{ engine.size }}</strong> <small>cm³</small></span>
+            </div>
+            <div class="col-4 d-flex flex-column">
+                <span>Max power:</span>
+                <span><strong class="text-danger">{{ engine.maxPower }}</strong> <small>kW</small></span>
+            </div>
+            <div class="col-4 d-flex flex-column">
+                <span>Max torque:</span>
+                <span><strong class="text-primary">{{ engine.maxTorque }}</strong> <small>Nm</small></span>
+            </div>
+        </div>
+    </li>
+</ul>

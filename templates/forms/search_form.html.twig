@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="input-group mb-3">
+            {{ form_widget(form.manufacturer) }}
+        </div>
+        <div class="input-group mb-3">
+            {{ form_widget(form.fuel) }}
+        </div>
+        <div>
+            <div class="input-group">
+                {{ form_widget(form.engine_min_power) }}
+                <span class="input-group-text d-block">kW</span>
+            </div>
+            <span class="form-text">{{ form_label(form.engine_min_power) }}</span>
+        </div>
+        <div>
+            <div class="input-group">
+                {{ form_widget(form.rating) }}
+                <span class="input-group-text d-block">%</span>
+            </div>
+            <span class="form-text">{{ form_label(form.rating) }}</span>
+        </div>
+        <div>
+            <div class="input-group">
+
+            </div>
+        </div>
+        <hr/>
+        <div class="d-flex flex-row justify-content-between">
+            <span>{{ form_row(form.order_by_direction) }}</span>
+            <span>{{ form_row(form.order_by_field) }}</span>
+            <span class="py-5">{{ form_row(form.submit) }}</span>
+        </div>
+        <hr/>
+        {{ form_rest(form) }}
+    </div>
+    {{ form_end(form) }}
+</div>

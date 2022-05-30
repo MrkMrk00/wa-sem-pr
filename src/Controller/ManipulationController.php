@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ManipulationController extends AbstractController
 {
     /**
-     * @Route(path="/car/{id}", name="car", methods={"GET"})
+     * @Route(path="/car/{id}", name="car")
      * @IsGranted("ROLE_USER")
      */
     public function editCar(
@@ -47,7 +47,10 @@ class ManipulationController extends AbstractController
 
         $images_form = $this->createForm(CarImageType::class);
         $images_form->handleRequest($req);
-        $this->handleUploadImages($car, $images_form, $image_repo, $file_uploader);
+        $redir = $this->handleUploadImages($car, $images_form, $image_repo, $file_uploader);
+        if ($redir) return $this->redirectToRoute('edit.car', [
+            'id' => $car->getId()
+        ]);
 
         $form = $this->createForm(CarType::class, $car);
         $form->handleRequest($req);
@@ -77,10 +80,10 @@ class ManipulationController extends AbstractController
         Car             $car,
         FormInterface   $form,
         ImageRepository $repo,
-        FileUploader    $uploader): void
+        FileUploader    $uploader): bool
     {
         if (!$form->isSubmitted() || !$form->isValid())
-            return;
+            return false;
 
         $images = $form->getData()['images'];
         foreach ($images as $image) {
@@ -90,7 +93,7 @@ class ManipulationController extends AbstractController
                     'error',
                     'Failed to upload image ' . htmlspecialchars($image->getClientOriginalName())
                 );
-                return;
+                return false;
             }
             $imageObject = (new Image())
                 ->setFileName($fileName)
@@ -103,13 +106,14 @@ class ManipulationController extends AbstractController
                     'error',
                     'Failed to persist image to database: ' . $e->getMessage()
                 );
-                return;
+                return false;
             }
         }
         $this->addFlash(
             'success',
             'Images uploaded successfully'
         );
+        return true;
     }
 
     /**

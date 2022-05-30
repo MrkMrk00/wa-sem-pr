@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Search for cars{% endblock %}
+
+{% block body %}
+    <div class="container-fluid w-100">
+        <div class="row mt-3">
+            <div class="col-lg-4 col-sm-6">
+                <h3>Filters:</h3>
+                <hr/>
+                {% include 'forms/search_form.html.twig' with {'form': search_form} %}
+            </div>
+            <div class="col-lg-8">
+                <h3>Cars:</h3>
+                <hr/>
+                {% include 'components/car_table.html.twig' with {'cars': cars} %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

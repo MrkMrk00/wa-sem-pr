@@ -4,32 +4,13 @@
 
 {% block body %}
     <div class="container-fluid">
-        <div class="row my-3">
-            <h1 class="w-100 text-center display-1">{{ engine }}</h1>
+        <div class="row my-3 justify-content-center">
+            {% include 'components/cards/engine.html.twig' with {'engine': engine} %}
         </div>
         <div class="row my-3 px-5">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <td>Name</td>
-                    <td>Generation</td>
-                    <td>Manufactured</td>
-                    <td>Driven axle</td>
-                    <td>Seat count</td>
-                </tr>
-                </thead>
-                <tbody>
-                {% for car in engine.cars %}
-                    <tr data-href="{{ path('details.car', {'id': car.id}) }}">
-                        <td>{{ car.name }}</td>
-                        <td>{% if car.generation %}{{ car.generation }}{% endif %}</td>
-                        <td>{{ car.manufactured }}</td>
-                        <td>{{ car.drivenAxle }}</td>
-                        <td>{{ car.seatCount }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <span class="w-100 text-left display-5">In cars:</span>
+            <hr />
+            {% include 'components/car_table.html.twig' with {'cars': engine.cars} %}
         </div>
     </div>
 {% endblock %}
