@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Car;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
 use \Doctrine\DBAL\Driver\Exception as DriverException;
@@ -45,6 +46,40 @@ class CarRepository extends ServiceEntityRepository
 
         if ($flush) {
             $this->getEntityManager()->flush();
+        }
+    }
+
+    /**
+     * Selects only cars, who have not been rated by user in the past 7 days
+     * @param User $user user who is rating cars
+     * @return Car|null car to rate
+     */
+    public function getCarForRating(User $user): ?Car
+    {
+        $qb0 = $this->createDbalQb();
+        $qb0->select('r.car_id as id')
+            ->distinct()
+            ->from('car_review', 'r')
+            ->where('r.user_id=:user_id')
+            ->andWhere('r.timestamp > :tst')
+            ->setParameter('user_id', $user->getId())
+            ->setParameter('tst', (new \DateTime('-7 days'))->format('Y:m:d H:i:s'));
+
+        try {
+            $ids = $qb0->execute()->fetchFirstColumn();
+            $qb = $this->createQueryBuilder('c');
+
+            $res = $qb->select('c')
+                ->where($qb->expr()->notIn(
+                    'c.id', $ids
+                ))
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+            return empty($res) ? null : $res[0];
+        } catch (Exception|DriverException $e) {
+            return null;
         }
     }
 

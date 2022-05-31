@@ -2,16 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\CarReview;
 use App\Form\BodyStyleType;
 use App\Form\CarType;
 use App\Form\EngineType;
 use App\Form\ManufacturerType;
+use App\Form\RatingFormType;
 use App\Repository\CarRepository;
+use App\Repository\CarReviewRepository;
 use App\Repository\ImageRepository;
 use Doctrine\DBAL\Connection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,10 +54,49 @@ class IndexController extends AbstractController
      * @Route(path="/rate", name="rate_cars")
      * @IsGranted("ROLE_USER")
      */
-    public function rateCars(): Response
+    public function rateCars(Request $req, CarRepository $repo, CarReviewRepository $review_repo): Response
     {
+        $form = $this->createForm(RatingFormType::class);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            try {
+                $review_repo->add($data, true);
+            } catch (\Exception $e) {
+                $this->addFlash(
+                    'error',
+                    'Unable to persist review ' . $e->getMessage()
+                );
+                return $this->redirectToRoute('rate_cars');
+            }
+            $this->addFlash(
+                'success',
+                'Reviewed successfully'
+            );
+            return $this->redirectToRoute('rate_cars');
+        }
+
+        $car = $repo->getCarForRating($this->getUser());
+        $review = (new CarReview())
+            ->setUser($this->getUser())
+            ->setCar($car)
+            ->setTimestamp(new \DateTime('now'));
+
+        $form->setData($review);
+
+        if (!$car) {
+            return $this->render('render_it.html.twig', [
+                'it' => 'No car available for rating!',
+                'active_link' => 'rate_cars'
+            ]);
+        }
+
+
         return $this->render('pages/rate_cars.html.twig', [
-            'active_link' => 'rate_cars'
+            'active_link' => 'rate_cars',
+            'car' => $car,
+            'form' => $form->createView()
         ]);
     }
 

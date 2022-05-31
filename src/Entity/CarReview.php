@@ -36,6 +36,11 @@ class CarReview
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $timestamp;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -73,6 +78,18 @@ class CarReview
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTimestamp(): ?\DateTimeInterface
+    {
+        return $this->timestamp;
+    }
+
+    public function setTimestamp(\DateTimeInterface $timestamp): self
+    {
+        $this->timestamp = $timestamp;
 
         return $this;
     }

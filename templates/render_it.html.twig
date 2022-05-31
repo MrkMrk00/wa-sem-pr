@@ -1,4 +1,7 @@
 {% extends 'base.html.twig' %}
+{% if type is not defined %}
+    {% set type = 'other' %}
+{% endif %}
 
 {% block title %}
     {% if title is defined %}
