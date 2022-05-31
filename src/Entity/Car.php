@@ -6,6 +6,7 @@ use App\Repository\CarRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,6 +35,11 @@ class Car
      * )
      */
     private $manufactured;
+
+    /**
+     * @OneToMany(targetEntity="App\Entity\CarReview", mappedBy="car")
+     */
+    private $reviews;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -84,7 +90,48 @@ class Car
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
+
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    public function removeReview(CarReview $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getCar() === $this) {
+                $review->setCar(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addReview(CarReview $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setCar($this);
+        }
+
+        return $this;
+    }
+
+    public function getReviewIndex(): float
+    {
+        $sum = 0;
+        $count = 0;
+        foreach ($this->getReviews() as $review) {
+            $sum += $review->getValue();
+            $count++;
+        }
+        if ($count === 0) return 0;
+        return ($sum/$count);
+    }
+
 
     public function getId(): ?int
     {

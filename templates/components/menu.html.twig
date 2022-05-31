@@ -22,6 +22,10 @@
                     <a class="d-inline-block nav-link{% if active_link == 'filtration' %} active{% endif %}"
                        href="{{ path('car_filtration') }}"><i class="fa-solid fa-magnifying-glass{% if active_link == 'filtration' %} text-primary{% endif %}"></i> Look at cars</a>
                 </li>
+                <li class="nav-item px-xl-2">
+                    <a class="d-inline-block nav-link{% if active_link == 'rate_cars' %} active{% endif %}"
+                       href="{{ path('rate_cars') }}"><i class="fa-solid fa-star-half-stroke{% if active_link == 'rate_cars' %} text-primary{% endif %}"></i> Rate cars</a>
+                </li>
                 <li class="nav-item px-xl-5">
                     <a class="d-inline-block nav-link{% if active_link == 'new_car' %} active{% endif %}"
                        href="{{ path('new_car') }}"><i class="fa-solid fa-plus{% if active_link == 'new_car' %} text-primary{% endif %}"></i> New car</a>

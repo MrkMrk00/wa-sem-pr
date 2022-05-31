@@ -3,10 +3,16 @@
 {% block title %}{{ 'Here are cars!'|trans }}{% endblock %}
 
 {% block body %}
-{% for car in top_ten_cars %}
-    {% include 'components/cards/car.html.twig' with {
-        'car': car,
-        'dbal': true
-    } %}
-{% endfor %}
+    <div class="container-fluid">
+        <div class="row w-100 justify-content-center">
+            {% for car in top_ten_cars %}
+                <div class="col-lg-4">
+                    {% include 'components/cards/car.html.twig' with {
+                        'car': car,
+                        'dbal': true
+                    } %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

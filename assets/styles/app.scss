@@ -89,3 +89,23 @@ tr[data-href] {
         @extend .list-group-item, .d-flex, .justify-content-between;
     }
 }
+
+.card-car-image {
+    @extend .card-img-top;
+    max-width: 100%;
+    height: 15rem;
+    object-fit: cover;
+}
+
+.card-car-icon {
+    @extend .card-car-image;
+    position: relative;
+
+    i {
+        @extend .text-primary;
+        position: absolute;
+        transform: scale(10);
+        left: 50%;
+        top: 50%;
+    }
+}

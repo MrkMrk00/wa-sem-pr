@@ -7,6 +7,7 @@ use App\Form\CarType;
 use App\Form\EngineType;
 use App\Form\ManufacturerType;
 use App\Repository\CarRepository;
+use App\Repository\ImageRepository;
 use Doctrine\DBAL\Connection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,9 +21,11 @@ class IndexController extends AbstractController
     /**
      * @Route(path="/", name="index")
      */
-    public function index(Connection $conn, CarRepository $repo): Response
+    public function index(CarRepository $car_repo, ImageRepository $image_repo): Response
     {
-        $top_ten_cars = $repo->getTenTopRated();
+        $cars_raw = $car_repo->getTenTopRated();
+        $top_ten_cars = $image_repo->attachImagesOnCars($cars_raw);
+
         return $this->render('pages/index.html.twig', [
             'active_link' => 'index',
             'top_ten_cars' => $top_ten_cars
@@ -40,6 +43,17 @@ class IndexController extends AbstractController
         return $this->render('pages/my_cars.html.twig', [
             'active_link' => 'my_cars',
             'cars' => $cars
+        ]);
+    }
+
+    /**
+     * @Route(path="/rate", name="rate_cars")
+     * @IsGranted("ROLE_USER")
+     */
+    public function rateCars(): Response
+    {
+        return $this->render('pages/rate_cars.html.twig', [
+            'active_link' => 'rate_cars'
         ]);
     }
 

@@ -1,8 +1,8 @@
-<ul class="info-list-group col-lg-6">
+<ul class="info-list-group">
     {% if engine.name != null%}
         <li>
-            <span>Engine code:</span>
-            <span><strong>{{ engine.name }}</strong></span>
+            <h3>Engine code:</h3>
+            <h3><a href="{{ path('details.engine', {'id': engine.id}) }}">{{ engine.name }}</a></h3>
         </li>
     {% endif %}
     <li>

@@ -2,6 +2,17 @@
     {% set dbal = false %}
 {% endif %}
 <div class="card">
+    {% if car.images is defined and car.images is not empty %}
+        <div class="p-1">
+            <img src="{{ upload_image_dir }}/{% if dbal %}{{ random(car.images).file_name }}{% else %}{{ random(car.images).fileName }}{% endif %}"
+                 class="card-car-image" alt="{{ car.name }}">
+        </div>
+
+    {% else %}
+        <div class="card-car-icon p-1">
+            <i class="fa-solid fa-car"></i>
+        </div>
+    {% endif %}
     <div class="card-body">
         <div class="card-title d-flex justify-content-between">
             <a href="{{ path('details.car', { 'id': car.id }) }}">
@@ -14,7 +25,13 @@
                     {{ car.name }}
                 </h5>
             </a>
-            <span>{% if dbal %}<p>{{ (100*(car.review/car.review_count+1))|number_format('2') }} %</p>{% endif %}</span>
+            <span>
+                {% if dbal %}
+                    <p>{{ (50*(car.review/car.review_count+1))|number_format('2') }} %</p>
+                {% else %}
+                    <p>{{ (50*(car.reviewIndex+1))|number_format('2') }} %</p>
+                {% endif %}
+            </span>
         </div>
 
         <ul class="list-group list-group-flush card-text">

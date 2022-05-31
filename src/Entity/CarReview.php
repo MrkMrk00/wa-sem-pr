@@ -25,7 +25,7 @@ class CarReview
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Car::class)
+     * @ORM\ManyToOne(targetEntity=Car::class, inversedBy="reviews")
      * @ORM\JoinColumn(nullable=false)
      */
     private $car;

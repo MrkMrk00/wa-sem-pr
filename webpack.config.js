@@ -11,8 +11,9 @@ Encore
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
     .setPublicPath('/build')
-    // only needed for CDN's or sub-directory deploy
-    //.setManifestKeyPrefix('build/')
+    // deployment:
+    // .setPublicPath('https://eso.vse.cz/~haum04/public/build')
+    // .setManifestKeyPrefix('build/')
 
     /*
      * ENTRY CONFIG

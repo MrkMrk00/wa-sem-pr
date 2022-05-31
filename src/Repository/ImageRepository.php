@@ -2,8 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Car;
 use App\Entity\Image;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
+use \Doctrine\DBAL\Driver\Exception as DriverException;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +23,11 @@ class ImageRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Image::class);
+    }
+
+    private function createDbalQb(): QueryBuilder
+    {
+        return $this->_em->getConnection()->createQueryBuilder();
     }
 
     public function add(Image $entity, bool $flush = false): void
@@ -39,28 +48,31 @@ class ImageRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Image[] Returns an array of Image objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    private function dbalFind(?int $car_id=null): ?array
+    {
+        $qb = $this->createDbalQb();
+        $qb->select('*')
+            ->from('image', 'i');
 
-//    public function findOneBySomeField($value): ?Image
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($car_id != null)
+            $qb->where($qb->expr()->eq('car_id', (int)$car_id));
+
+        try {
+            return $qb->execute()->fetchAllAssociative();
+        } catch (Exception|DriverException $e) {
+            return null;
+        }
+    }
+
+    public function attachImagesOnCars(array $cars): array
+    {
+        $map_fun = function ($car) {
+            $car_id = $car['id'];
+            $images = $this->dbalFind($car_id);
+
+            $car['images'] = empty($images) ? [] : $images;
+            return $car;
+        };
+        return array_map($map_fun, $cars);
+    }
 }
